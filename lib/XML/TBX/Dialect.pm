@@ -1,20 +1,30 @@
-#modified from "Effective Perl Programming" by Joseph N. Hall, et al.
 package XML::TBX::Dialect;
 use strict;
 use warnings;
+use feature 'state';
+use File::Slurp;
+use Path::Tiny;
 use autodie;
+use File::ShareDir 'dist_dir';
+use Exporter::Easy (
+	OK => [ qw(core_structure_rng) ],#TODO: add others
+);
+
 # VERSION
 
 
-# ABSTRACT: Default Module Template
+# ABSTRACT: Create new TBX dialects
 =head1 SYNOPSIS
 
-	my $obj = XML::TBX::Dialect->new();
-	$obj->message();
+	my $dialect = XML::TBX::Dialect->new(
+		xcs => '/path/to/xcs'
+	);
+	print $dialect->as_rng();
 
 =head1 DESCRIPTION
 
-Description here
+This module allows you to create new resources to work with TBX dialects. Currently it only provides RNG generation from XCS information, but
+in the future we plan to add XSD generation and to allow tweaking the core structure DTD.
 
 =cut
 
@@ -30,7 +40,7 @@ sub _run {
 
 =head2 C<new>
 
-Creates a new instance of XML::TBX::Dialect
+Creates a new instance of XML::TBX::Dialect.
 
 =cut
 
@@ -92,14 +102,15 @@ sub input_fh {
 	return $application->{input_fh};
 }
 
-=head2 C<other_subroutines>
+=head2 C<core_structure_rng>
 
-PUT MORE SUBROUTINES HERE
+Returns a pointer to a string containing the TBX core structure (version 2) RNG.
 
 =cut
 
-sub other_subroutines {
-	"YOUR WORK STARTS HERE\n";
+sub core_structure_rng {
+	my $rng = read_file(path(dist_dir('XML-TBX-Dialect'),'TBXcoreStructV02.rng'));
+	return \$rng;
 }
 
 1;
