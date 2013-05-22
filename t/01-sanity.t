@@ -27,7 +27,7 @@ is($error, undef, 'RNG validates minimal TBX file')
 	or note $error;
 
 $error = $jing->validate($tbx_basic_sample);
-is($error, undef, 'RNG validates minimal TBX file')
+is($error, undef, 'RNG validates TBX-Basic example file')
 	or note $error;
 
 #clean up after test
