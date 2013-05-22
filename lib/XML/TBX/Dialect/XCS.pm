@@ -57,7 +57,9 @@ sub parse {
 		}
 		$self->{twig}->parsefile( $args{file} );
 	}elsif(exists $args{string}){
-		$self->{twig}->parsefile( ${$args{string}} );
+		$self->{twig}->parse( ${$args{string}} );
+	}else{
+		croak 'Need to specify either a file or a string pointer with XCS contents';
 	}
 	$self->{xcs_constraints} = $self->{twig}->{xcs_constraints};
 	return;
