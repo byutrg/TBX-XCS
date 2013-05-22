@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <!DOCTYPE martif SYSTEM "TBXcoreStructV02.dtd">
-<martif type="TBX-Basic" xml:lang="en-US">
+<martif type="TBX-Basic" xml:lang="en">
 	<martifHeader>
 		<fileDesc>
 			<titleStmt>
@@ -25,7 +25,7 @@
 				</langSet>
 			</termEntry>
 			<termEntry id="c2">
-				<langSet xml:lang="en">
+				<langSet xml:lang="fr">
 					<tig>
 						<term>bar</term>
 					</tig>

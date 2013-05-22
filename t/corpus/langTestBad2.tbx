@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <!DOCTYPE martif SYSTEM "TBXcoreStructV02.dtd">
-<martif type="TBX-Basic" xml:lang="en-US">
+<martif type="TBX-Basic" xml:lang="en">
 	<martifHeader>
 		<fileDesc>
 			<titleStmt>
@@ -25,7 +25,8 @@
 				</langSet>
 			</termEntry>
 			<termEntry id="c2">
-				<langSet xml:lang="en">
+				<!-- Should fail, since XCS doesn't have Lushootseed -->
+				<langSet xml:lang="lut">
 					<tig>
 						<term>bar</term>
 					</tig>

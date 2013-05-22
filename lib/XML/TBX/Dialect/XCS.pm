@@ -8,6 +8,7 @@ use Data::Dumper;
 # VERSION
 
 # ABSTRACT: Extract data from an XCS file
+#
 =head1 SYNOPSIS
 
 	my $xcs = XML::Dialect::XCS->new(file=>'/path/to/file.xcs')
