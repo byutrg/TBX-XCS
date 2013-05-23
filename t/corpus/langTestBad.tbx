@@ -1,7 +1,6 @@
 <?xml version='1.0'?>
 <!DOCTYPE martif SYSTEM "TBXcoreStructV02.dtd">
-<!-- Should fail, since XCS doesn't have Lushootseed -->
-<martif type="TBX-Basic" xml:lang="lut">
+<martif type="TBX-Basic" xml:lang="en">
 	<martifHeader>
 		<fileDesc>
 			<titleStmt>
@@ -12,7 +11,8 @@
 			</sourceDesc>
 		</fileDesc>
 		<encodingDesc>
-			<p type="XCSURI">TBXBasicXCSV02.xcs
+			<!-- Should fail, as Lushootseed isn't allowed by small.xcs -->
+			<p type="XCSURI" xml:lang="lut">small.xcs
 			</p>
 		</encodingDesc>
 	</martifHeader>

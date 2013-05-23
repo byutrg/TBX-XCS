@@ -10,9 +10,11 @@ use File::Slurp;
 
 my $corpus_dir = path($Bin, 'corpus');
 
+#TODO: should also check with TBXChecker
 # for each block, create an RNG from an XCS file,
 # then test it against valid and invalid TBX
 for my $block(blocks){
+	note $block->name;
 	#create an RNG and write it to a temporary file
 	my $dialect = XML::TBX::Dialect->new();
 	my $xcs = $block->xcs;
@@ -24,17 +26,17 @@ for my $block(blocks){
 
 	for my $good( $block->good ){
 		my $error = $jing->validate( path($corpus_dir, $good) );
-		ok(!$error, "$good validates with RNG created from $xcs")
+		ok(!$error, "$good validates with $xcs RNG")
 			or note($error);
 	}
 	for my $bad( $block->bad ){
 		my $error = $jing->validate( path($corpus_dir, $bad) );
-		ok($error, "$bad doesn't validate with RNG created from $xcs");
+		ok($error, "$bad doesn't validate with $xcs RNG");
 	}
 }
 
 __DATA__
-=== language
+=== Specify languages via XCS
 --- xcs: small.xcs
 --- good: langTestGood.tbx
 --- bad lines chomp

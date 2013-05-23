@@ -67,7 +67,7 @@
     </optional>
     <optional>
 
-<ref name="attribute.language"/>
+      <ref name="attribute.language"/>
     </optional>
   </define>
   <define name="impIDType">
@@ -100,7 +100,7 @@
     </optional>
   </define>
   <define name="attribute.language">
-      <attribute name="xml:lang"/>
+    <attribute name="xml:lang"/>
   </define>
   <!--
     ================================================================================
@@ -140,7 +140,7 @@
     </optional>
     <optional>
 
-<ref name="attribute.language"/>
+      <ref name="attribute.language"/>
     </optional>
   </define>
   <define name="bpt">
@@ -297,7 +297,7 @@
       </attribute>
     </optional>
 
-<ref name="attribute.language"/>
+    <ref name="attribute.language"/>
   </define>
   <define name="note">
     <element name="note">
@@ -536,8 +536,7 @@
   <!-- *** starting element *** -->
   <define name="attlist.martif" combine="interleave">
     <attribute name="type"/>
-
-<ref name="attribute.language"/>
+    <attribute name="xml:lang"/>
   </define>
   <define name="martifHeader">
     <element name="martifHeader">
@@ -582,7 +581,7 @@
     </optional>
     <optional>
 
-<ref name="attribute.language"/>
+      <ref name="attribute.language"/>
     </optional>
   </define>
   <define name="fileDesc">
