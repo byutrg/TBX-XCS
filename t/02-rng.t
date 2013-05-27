@@ -11,9 +11,9 @@ use File::Slurp;
 
 my $corpus_dir = path($Bin, 'corpus');
 
-#TODO: should also check with TBXChecker
 # for each block, create an RNG from an XCS file,
 # then test it against valid and invalid TBX
+# double check validity with TBX::Checker
 for my $block(blocks){
 	note $block->name;
 	#create an RNG and write it to a temporary file
@@ -23,7 +23,7 @@ for my $block(blocks){
 	my $rng = $dialect->as_rng;
 	my $tmp = File::Temp->new();
 	write_file($tmp, $rng);
-	print $$rng;
+	# print $$rng;
 	my $jing = XML::Jing->new($tmp->filename);
 
 	for my $good( $block->good ){
@@ -39,6 +39,7 @@ for my $block(blocks){
 
 # pass in a pre-loaded XML::Jing, the name of the TBX file to check, and a boolean
 # representing whether the file should be valid
+#  Tests for TBX validity via $jing and via TBX::Checker
 sub compare_validation {
 	my ($jing, $tbx_file, $expected) = @_;
 	subtest "$tbx_file should " . ($expected ? q() : 'not ') . 'be valid' =>
@@ -55,7 +56,7 @@ sub compare_validation {
 }
 
 __DATA__
-=== Specify languages via XCS
+=== Specify langSet languages via XCS
 --- xcs: small.xcs
 --- bad: langTestBad.tbx
 --- good lines chomp

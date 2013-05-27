@@ -94,9 +94,6 @@
       <attribute name="datatype"/>
     </optional>
   </define>
-  <define name="attribute.language">
-    <!-- XCS languages here --><attribute name="xml:lang"/>
-  </define>
   <!--
     ================================================================================
     ELEMENTS USED FOR TEXT MARKUP
@@ -291,7 +288,7 @@
         <data type="ID"/>
       </attribute>
     </optional>
-    <ref name="attribute.language"/>
+    <!-- XCS languages here --><attribute name="xml:lang"/>
   </define>
   <define name="note">
     <element name="note">

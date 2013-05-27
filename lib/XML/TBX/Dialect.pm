@@ -88,6 +88,8 @@ sub as_rng {
 
 	my $rng = core_structure_rng();
 	_add_rng_languages($rng, $languages);
+	_add_rng_ref_objects($rng, $xcs->get_ref_objects());
+	_add_rng_datacats($rng, $xcs->get_data_cats());
 
 	return $rng;
 }
@@ -107,6 +109,16 @@ sub _add_rng_languages {
 	$xml_lang_att .= "\t</attribute>";
 	$$rng =~ s{<!-- XCS languages here -->\K<attribute name="xml:lang"/>}{$xml_lang_att};
 	return;
+}
+
+sub _add_rng_ref_objects{
+	my ($rng, $ref_objects) = @_;
+	#unimplemented
+}
+
+#add the language choices to the xml:lang attribute section
+sub _add_rng_datacats {
+	my ($rng, $datacats) = @_;
 }
 
 =head2 C<core_structure_rng>

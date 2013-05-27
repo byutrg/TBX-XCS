@@ -71,6 +71,16 @@ sub get_languages {
 	return $self->{xcs_constraints}->{languages};
 }
 
+sub get_ref_objects {
+	my ($self) = @_;
+	return $self->{xcs_constraints}->{refObjects} ;
+}
+
+sub get_data_cats {
+	my ($self) = @_;
+	return $self->{xcs_constraints}->{datCatSet};
+}
+
 sub _init {
 	my ($self) = @_;
 	$self->{twig}->{xcs_constraints} = {};
