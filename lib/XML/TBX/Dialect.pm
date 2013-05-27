@@ -105,7 +105,7 @@ sub _add_rng_languages {
 	}
 	$xml_lang_att .= "\t\t</choice>\n";
 	$xml_lang_att .= "\t</attribute>";
-	$$rng =~ s{<attribute name="xml:lang"/>}{$xml_lang_att};
+	$$rng =~ s{<!-- XCS languages here -->\K<attribute name="xml:lang"/>}{$xml_lang_att};
 	return;
 }
 

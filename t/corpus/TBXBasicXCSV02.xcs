@@ -1,10 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE TBXXCS SYSTEM "tbxxcsdtd.dtd">
-<TBXXCS name="Small" version="2" lang="en">
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE TBXXCS SYSTEM "tbxxcsdtd.dtd"> 
+<TBXXCS name="Basic" version="2" lang="en">
+    <!-- Last updated: November 17, 2008. Address enquiries to: arle@lisa.org -->
     <header>
-        <title>Example XCS file</title>
+        <title>TBX Basic XCS (extensible constraint specification) file Version 2 (Filename:
+            TBXBasicXCSV02.XCS)</title>
+        <!--If the default XCS file is modified to include additional data categories,
+you must list them in a commented-out section in the header of the XCS file. NOTE: If you add data categories, your
+document instance no longer complies with TBX-Basic. -->
+        <!--The following section documents that TBX-Basic implementations may use simpler display values for the
+data category administrativeStatus.-->
+        <datCatDoc>
+            <datCatMap>
+                <datCatToken>preferredTerm-admn-sts</datCatToken>
+                <datCatDisplay>preferred</datCatDisplay>
+            </datCatMap>
+            <datCatMap>
+                <datCatToken>admittedTerm-admn-sts</datCatToken>
+                <datCatDisplay>admitted</datCatDisplay>
+            </datCatMap>
+            <datCatMap>
+                <datCatToken>deprecatedTerm-admn-sts</datCatToken>
+                <datCatDisplay>notRecommended</datCatDisplay>
+            </datCatMap>
+            <datCatMap>
+                <datCatToken>supersededTerm-admn-sts</datCatToken>
+                <datCatDisplay>obsolete</datCatDisplay>
+            </datCatMap>
+        </datCatDoc>
     </header>
-    <!-- All languages used in a TBX document instance must be declared in the elements below.-->
+    <!-- All languages used in a TBX document instance must be declared in the elements below.
+Here, English and French are declared for demonstration purposes, using a simple two character language code. You can use any
+language code format that is allowed by IETF RFC 4646 or its successor. -->
     <languages>
         <langInfo>
             <langCode>en</langCode>

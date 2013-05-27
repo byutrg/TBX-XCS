@@ -3,10 +3,6 @@
 <!-- start schema here tbx_core.dtd -->
 <!-- TBXcoreStructV02.dtd -->
 <!--
-  note: see XCS for values of type on meta data-categories and for values of
-  xml:lang
--->
-<!--
   =================================================================================
   SOME USEFUL ENTITIES THAT ARE REFERENCED BELOW
   ==================================================================================
@@ -66,8 +62,7 @@
       </attribute>
     </optional>
     <optional>
-
-      <ref name="attribute.language"/>
+      <attribute name="xml:lang"/>
     </optional>
   </define>
   <define name="impIDType">
@@ -87,7 +82,7 @@
       </attribute>
     </optional>
     <optional>
-      <ref name="attribute.language"/>
+      <attribute name="xml:lang"/>
     </optional>
     <attribute name="type"/>
     <optional>
@@ -100,7 +95,7 @@
     </optional>
   </define>
   <define name="attribute.language">
-    <attribute name="xml:lang"/>
+    <!-- XCS languages here --><attribute name="xml:lang"/>
   </define>
   <!--
     ================================================================================
@@ -123,7 +118,7 @@
       </attribute>
     </optional>
     <optional>
-      <ref name="attribute.language"/>
+      <attribute name="xml:lang"/>
     </optional>
   </define>
   <define name="foreign">
@@ -140,7 +135,7 @@
     </optional>
     <optional>
 
-      <ref name="attribute.language"/>
+      <attribute name="xml:lang"/>
     </optional>
   </define>
   <define name="bpt">
@@ -296,7 +291,6 @@
         <data type="ID"/>
       </attribute>
     </optional>
-
     <ref name="attribute.language"/>
   </define>
   <define name="note">
@@ -581,7 +575,7 @@
     </optional>
     <optional>
 
-      <ref name="attribute.language"/>
+      <attribute name="xml:lang"/>
     </optional>
   </define>
   <define name="fileDesc">

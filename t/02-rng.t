@@ -4,6 +4,7 @@ use Test::More 0.88;
 plan tests => 3;
 use XML::TBX::Dialect;
 use XML::Jing;
+use TBX::Checker qw(check);
 use Path::Tiny;
 use FindBin qw($Bin);
 use File::Slurp;
@@ -22,6 +23,7 @@ for my $block(blocks){
 	my $rng = $dialect->as_rng;
 	my $tmp = File::Temp->new();
 	write_file($tmp, $rng);
+	print $$rng;
 	my $jing = XML::Jing->new($tmp->filename);
 
 	for my $good( $block->good ){
@@ -35,10 +37,27 @@ for my $block(blocks){
 	}
 }
 
+# pass in a pre-loaded XML::Jing, the name of the TBX file to check, and a boolean
+# representing whether the file should be valid
+sub compare_validation {
+	my ($jing, $tbx_file, $expected) = @_;
+	subtest "$tbx_file should " . ($expected ? q() : 'not ') . 'be valid' =>
+	sub {
+		plan tests => 2;
+		my ($valid, $messages) = check($tbx_file);
+		is($valid, $expected, 'TBXChecker')
+			or note explain $messages;
+
+		my $error = $jing->validate($tbx_file);
+		ok(defined($error) == $expected, 'Core structure RNG')
+			or note $error;
+	};
+}
+
 __DATA__
 === Specify languages via XCS
 --- xcs: small.xcs
---- good: langTestGood.tbx
---- bad lines chomp
-langTestBad.tbx
-langTestBad2.tbx
+--- bad: langTestBad.tbx
+--- good lines chomp
+langTestGood.tbx
+langTestGood2.tbx

@@ -11,7 +11,8 @@
 			</sourceDesc>
 		</fileDesc>
 		<encodingDesc>
-			<p type="XCSURI">small.xcs
+			<!-- Should be ok; xml:lang only restricted via XCS in <langSet> -->
+			<p type="XCSURI" xml:lang="lut">small.xcs
 			</p>
 		</encodingDesc>
 	</martifHeader>
@@ -25,8 +26,7 @@
 				</langSet>
 			</termEntry>
 			<termEntry id="c2">
-				<!-- Should fail, since XCS doesn't have Lushootseed -->
-				<langSet xml:lang="lut">
+				<langSet xml:lang="en">
 					<tig>
 						<term>bar</term>
 					</tig>
