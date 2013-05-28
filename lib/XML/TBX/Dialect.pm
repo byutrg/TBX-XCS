@@ -8,6 +8,7 @@ use Path::Tiny;
 use autodie;
 use Carp;
 use Data::Dumper;
+use XML::Twig;
 use File::ShareDir 'dist_dir';
 use Exporter::Easy (
 	OK => [ qw(core_structure_rng) ],#TODO: add others
@@ -81,33 +82,42 @@ sub as_rng {
 	if(!$xcs){
 		croak "No XCS set yet! Can't create an RNG.";
 	}
+	my $twig = new XML::Twig(
+		pretty_print			=> 'indented',
+		output_encoding		=> 'UTF-8',
+		do_not_chain_handlers	=> 1, #can be important when things get complicated
+		keep_spaces			=> 0,
+		no_prolog			=> 1,
+	);
 
-	my $languages = $xcs->get_languages();
-	croak "No languages specified in XCS!"
-		unless(keys %$languages);
+	_add_language_handlers($twig, $xcs->get_languages());
+	# _add_rng_ref_objects($rng, $xcs->get_ref_objects());
+	# _add_rng_datacats($rng, $xcs->get_data_cats());
 
-	my $rng = core_structure_rng();
-	_add_rng_languages($rng, $languages);
-	_add_rng_ref_objects($rng, $xcs->get_ref_objects());
-	_add_rng_datacats($rng, $xcs->get_data_cats());
+	$twig->parsefile(_core_structure_rng_location());
 
-	return $rng;
+	my $rng = $twig->sprint;
+	return \$rng;
 }
 
-#add the language choices to the xml:lang attribute section
-sub _add_rng_languages {
-	my ($rng, $languages) = @_;
+#add handlers to add the language choices to the langSet specification
+sub _add_language_handlers {
+	my ($twig, $languages) = @_;
 
-	my $xml_lang_att = qq{<attribute name="xml:lang">\n};
-	$xml_lang_att .= "\t\t<choice>\n";
-	# print Dumper $languages;
-	# print join ':', keys %$languages;
+	#make an RNG spec for xml:lang, to be placed
+	my $choice = XML::Twig::Elt->new('choice');
+	my @lang_spec = ('choice');
 	for my $abbrv(sort keys %$languages){
-		$xml_lang_att .= "\t\t\t<value>$abbrv</value>\n"
+		XML::Twig::Elt->new('value', $abbrv )->paste($choice);
 	}
-	$xml_lang_att .= "\t\t</choice>\n";
-	$xml_lang_att .= "\t</attribute>";
-	$$rng =~ s{<!-- XCS languages here -->\K<attribute name="xml:lang"/>}{$xml_lang_att};
+	$twig->setTwigHandler(
+		'define[@name="attlist.langSet"]/attribute[@name="xml:lang"]',
+		sub {
+			my ($twig, $elt) = @_;
+			$choice->paste($elt);
+			warn $elt->sprint;
+		}
+	);
 	return;
 }
 
@@ -127,9 +137,14 @@ Returns a pointer to a string containing the TBX core structure (version 2) RNG.
 
 =cut
 
+
 sub core_structure_rng {
-	my $rng = read_file(path(dist_dir('XML-TBX-Dialect'),'TBXcoreStructV02.rng'));
+	my $rng = read_file(_core_structure_rng_location());
 	return \$rng;
+}
+
+sub _core_structure_rng_location {
+	return path(dist_dir('XML-TBX-Dialect'),'TBXcoreStructV02.rng');
 }
 
 1;

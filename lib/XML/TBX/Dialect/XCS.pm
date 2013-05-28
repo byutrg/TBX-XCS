@@ -163,7 +163,7 @@ my %default_levels = (
 	# termCompGrp
 	termCompList=> ['term'],
 
-	#these ones don't occur at at of the three levels
+	#these ones don't occur at any of the three levels
 	# descripNote
 	# hi
 	# transacNote
