@@ -1,7 +1,7 @@
 #make sure that the core structure RNG validates a TBX file
 use t::TestRNG;
 use Test::More 0.88;
-plan tests => 4;
+plan tests => 3;
 use XML::TBX::Dialect;
 use XML::Jing;
 use TBX::Checker qw(check);
@@ -40,7 +40,7 @@ for my $block(blocks){
 #  Tests for TBX validity via $jing and via TBX::Checker
 sub compare_validation {
 	my ($jing, $tbx_file, $expected) = @_;
-	subtest "$tbx_file should " . ($expected ? q() : 'not ') . 'be valid' =>
+	subtest $tbx_file->basename . ' should ' . ($expected ? q() : 'not ') . 'be valid' =>
 	sub {
 		plan tests => 2;
 		my ($valid, $messages) = check($tbx_file);
@@ -48,8 +48,10 @@ sub compare_validation {
 			or note explain $messages;
 
 		my $error = $jing->validate($tbx_file);
-		ok(defined($error) != $expected, 'Core structure RNG')
-			or note $error;
+		print $error if defined $error;
+		#undefined error means it's valid, defined invalid
+		ok((defined($error) xor $expected), 'Core structure RNG')
+			or ($error and note $error);
 	};
 }
 
@@ -62,7 +64,11 @@ langTestGood.tbx
 langTestGood2.tbx
 
 === adminNote
-# --- ONLY
---- good: adminNote.tbx
+--- ONLY
+--- good chomp
+adminGood.tbx
+--- bad lines chomp
+adminBad.tbx
+adminNoteBad.tbx
 --- xcs
 adminNote.xcs

@@ -4,7 +4,7 @@
     <header>
         <title>Example XCS file</title>
     </header>
-    <!-- All languages used in a TBX document instance must be declared in the elements below.-->
+
     <languages>
         <langInfo>
             <langCode>en</langCode>
@@ -19,24 +19,31 @@
             <langName>German</langName>
         </langInfo>
     </languages>
-    <!-- end of languages -->
 
-    <!-- Data category specifications start here -->
     <datCatSet>
         <descripSpec name="context" datcatId="ISO12620A-0503">
             <contents/>
             <levels>term</levels>
         </descripSpec>
-    </datCatSet>
-    <!-- end of data category specifications -->
+        <descripSpec name="descripFoo" datcatId="">
+            <contents/>
+            <levels/>
+        </descripSpec>
+        <termNoteSpec name="animacy" datcatId="ISO12620A-020204">
+            <contents datatype="picklist" forTermComp="yes">animate inanimate
+            otherAnimacy</contents>
+        </termNoteSpec>
+        <xrefSpec name="xrefFoo" datcatId="">
+            <contents targetType="external"/>
+        </xrefSpec>
 
-    <!-- For recording, in the backmatter of a TBX-Basic file, the names and other information about persons who are named in the transacNote elements, the elements are defined in the core structure DTD, and their type attributes are adopted from the vCard standard. See section 11.7 in the TBX Specification (ISO 30042). -->
-    <!-- the following markup is not required for TBX-Basic but must be included in the XCS file to make it valid. -->
+    </datCatSet>
+
     <refObjectDefSet>
         <refObjectDef>
-            <refObjectType/>
-            <itemSpecSet type="none">
-                <itemSpec type="none"/>
+            <refObjectType>Foo</refObjectType>
+            <itemSpecSet type="validItemType">
+                <itemSpec type="validItemType">data</itemSpec>
             </itemSpecSet>
         </refObjectDef>
     </refObjectDefSet>

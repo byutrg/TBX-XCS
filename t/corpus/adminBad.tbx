@@ -22,8 +22,8 @@
 					<tig>
 						<term>foo</term>
 						<adminGrp>
-							<admin type="annotatedNote">nothin'</admin>
-							<adminNote type="noteSource">1) Sabrafen_es, p. 260; 2) Williams_es, p. 96</adminNote>
+							<admin type="bad_category">bar</admin>
+							<adminNote type="noteSource">baz</adminNote>
 						</adminGrp>
 					</tig>
 				</langSet>
