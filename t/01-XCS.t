@@ -74,3 +74,5 @@ sub get_expected_data_cat {
         }]
     };
 }
+
+#TODO: test termCompLits warnings; test datatype warnings

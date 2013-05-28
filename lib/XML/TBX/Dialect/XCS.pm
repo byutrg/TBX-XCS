@@ -108,12 +108,37 @@ my %default_datatype = (
     #I don't think XCS will ever mess with this one in a complicated way
     #TODO: maybe change this to be shown as 'termCompList' type
     #TODO: how will we allow users to subset this?
-    termCompList=> 'auxInfo, (termComp | termCompGrp)+',
+    # termCompList=> 'auxInfo, (termComp | termCompGrp)+',
     termNote    => 'noteText',
     transacNote => 'plainText',
     transac     => 'plainText',
     xref        => 'plainText',
 );
+
+my $allowed_datatypes = do{
+
+    #what datatypes can become what other datatypes?
+    my %datatype_heirarchy = (
+        noteText    => {
+            'basicText' => 1,
+            'plainText' => 1,
+            'picklist'  => 1,
+            },
+        basicText   => {
+            'plainText' => 1,
+            'picklist'  => 1,
+        },
+        plainText   => {
+            'picklist'  => 1,
+        },
+    );
+
+    my $allowed_datatypes = {};
+    for my $category (keys %default_datatype){
+        $allowed_datatypes->{$category} = $datatype_heirarchy{ $default_datatype{$category} };
+    }
+    $allowed_datatypes;
+};
 
 #return an XML::Twig object which will extract data from an XCS file
 sub _init_twig {
@@ -203,11 +228,22 @@ sub _dataCat {
     #this element will be empty and have no attributes specified.
     my $contents = $el->first_child('contents');
 
-    #use default datatypes where not provided
-    $data->{datatype} =
-        ($contents->att('datatype') || $default_datatype{$type});
+    #check restrictions on datatypes
+    my $datatype = $contents->att('datatype');
+    if($datatype){
+        if($type eq 'termCompList'){
+            carp 'Ignoring datatype value in termCompList contents element';
+        }
+        elsif(! exists $allowed_datatypes->{$type}->{$datatype} ){
+            croak "Can't set datatype of $type to $datatype. Must be " .
+                join (' or ', keys %{ $allowed_datatypes->{$type}->{$datatype} }) . '.';
+        }
+    }else{
+        $datatype = $default_datatype{$type};
+    }
+    $data->{datatype} = $datatype;
 
-    if($data->{datatype} && $data->{datatype} eq 'picklist'){
+    if($datatype eq 'picklist'){
         $data->{choices} = [split ' ', $contents->text];
     }
     if ($contents->att('forTermComp')){
