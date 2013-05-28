@@ -115,61 +115,6 @@ my %default_datatype = (
 	xref		=> 'plainText',
 );
 
-# these are taken from page 10 of TBX_spec_OSCAR.pdf
-# changing these will require MAJOR RNG changes, since auxInfo is used all over
-# Levels: term = <tig> and <ntig>, termEntry = <termEntry>, langSet = <langSet>
-my %default_levels = (
-	# auxInfo items allowed at all three levels
-	adminNote	=>
-		[
-			'langSet',
-			'termEntry',
-			'term'
-		],
-	admin	=>
-		[
-			'langSet',
-			'termEntry',
-			'term'
-		],
-	# adminGrp
-	descrip	=>
-		[
-			'langSet',
-			'termEntry',
-			'term'
-		],
-	# descripGrp
-	ref		=>
-		[
-			'langSet',
-			'termEntry',
-			'term'
-		],
-	xref	=>
-		[
-			'langSet',
-			'termEntry',
-			'term'
-		],
-	# transacGrp
-
-	# term level only
-	# tig
-	# ntig
-	# termGrp
-	# termNoteGrp
-	termNote	=> ['term'],
-	# termCompGrp
-	termCompList=> ['term'],
-
-	#these ones don't occur at any of the three levels
-	# descripNote
-	# hi
-	# transacNote
-	# transac
-);
-
 #return an XML::Twig object which will extract data from an XCS file
 sub _init_twig {
 	return new XML::Twig(
@@ -272,11 +217,11 @@ sub _dataCat {
 	$data->{targetType} = $contents->att('targetType')
 		if $contents->att('targetType');
 
-	my $levels = $el->first_child('levels');
-	if($levels){
+	#levels can be specified for descrip data categories
+	if( $type eq 'descrip' && (my $levels = $el->first_child('levels') ) ){
 		$data->{levels} = [split ' ', $levels->text];
 	}else{
-		$data->{levels} = $default_levels{$type};
+		$data->{levels} = [qw(langSet termEntry term)]
 	}
 	#also, check page 10 of the OSCAR PDF for elements that can occur at multiple levels
 	push @{ $twig->{xcs_constraints}->{datCatSet}->{$type} }, $data;
