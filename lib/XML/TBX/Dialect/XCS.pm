@@ -259,6 +259,7 @@ sub _dataCat {
         if(my $levels = $el->first_child('levels')->text){
             $data->{levels} = [split ' ', $levels];
         }else{
+            #todo: not sure if this is the right behavior for an empty <levels/>
             $data->{levels} = [qw(langSet termEntry term)]
         }
     }

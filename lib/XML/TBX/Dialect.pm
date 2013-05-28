@@ -139,7 +139,7 @@ sub _get_meta_cat_handler {
         sub {
            my ($twig, $el) = @_;
            unless(exists $data_cats->{$meta_cat}){
-               $el->delete;
+               $el->set_outer_xml('<empty/>');
                return;
            }
            #replace children with choices based on data categories

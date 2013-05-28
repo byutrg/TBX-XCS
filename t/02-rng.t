@@ -1,7 +1,7 @@
 #make sure that the core structure RNG validates a TBX file
 use t::TestRNG;
 use Test::More 0.88;
-plan tests => 3;
+plan tests => 6;
 use XML::TBX::Dialect;
 use XML::Jing;
 use TBX::Checker qw(check);
@@ -63,8 +63,7 @@ __DATA__
 langTestGood.tbx
 langTestGood2.tbx
 
-=== adminNote
---- ONLY
+=== admin and adminNote
 --- good chomp
 adminGood.tbx
 --- bad lines chomp
