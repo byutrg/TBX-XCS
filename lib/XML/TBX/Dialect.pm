@@ -128,7 +128,7 @@ sub _add_ref_objects_handlers{
 #add the language choices to the xml:lang attribute section
 sub _add_data_cat_handlers {
     my ($twig, $data_cats) = @_;
-    for my $meta_type (qw(admin adminNote)){
+    for my $meta_type (qw(admin adminNote hi)){
         $twig->setTwigHandler(_get_meta_cat_handler($meta_type, $data_cats));
     }
 }

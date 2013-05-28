@@ -70,4 +70,11 @@ adminGood.tbx
 adminBad.tbx
 adminNoteBad.tbx
 --- xcs
-adminNote.xcs
+admin.xcs
+
+=== hi
+--- ONLY
+--- bad chomp
+hiBad.tbx
+--- xcs
+hi.xcs

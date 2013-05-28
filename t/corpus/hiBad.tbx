@@ -11,7 +11,7 @@
 			</sourceDesc>
 		</fileDesc>
 		<encodingDesc>
-			<p type="XCSURI">admin.xcs
+			<p type="XCSURI">hi.xcs
 			</p>
 		</encodingDesc>
 	</martifHeader>
@@ -20,11 +20,7 @@
 			<termEntry id="c1">
 				<langSet xml:lang="en">
 					<tig>
-						<term>foo</term>
-						<adminGrp>
-							<admin type="annotatedNote">foo</admin>
-							<adminNote type="noteSource">bar</adminNote>
-						</adminGrp>
+						<term>foo <hi type="bad_category">bar</hi></term>
 					</tig>
 				</langSet>
 			</termEntry>
