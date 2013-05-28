@@ -128,61 +128,38 @@ sub _add_ref_objects_handlers{
 #add the language choices to the xml:lang attribute section
 sub _add_data_cat_handlers {
     my ($twig, $data_cats) = @_;
-    # for my $metaType (keys %$data_cats){
-        $twig->setTwigHandler(
-             'define[@name="admin"]/element[@name="admin"]',
-             sub {
-                my ($twig, $el) = @_;
-                unless(exists $data_cats->{admin}){
-                    $el->delete;
-                    return;
-                }
-                #replace children with choices based on data categories
-                $el->cut_children;
-                my $admin_spec = $data_cats->{admin};
-                my $choice = XML::Twig::Elt->new('choice');
-                for my $data_cat(@{$admin_spec}){
-                    my $group = XML::Twig::Elt->new('group');
-                    XML::Twig::Elt->new('ref', { name => $data_cat->{datatype} })->
-                        paste($group);
-                    XML::Twig::Elt->parse(
-                        '<attribute name="type"><value>' .
-                        $data_cat->{name} .
-                        '</value></attribute>')->
-                        paste($group);
-                    $group->paste($choice);
-                 }
-                 $choice->paste($el);
-             }
-        );
-    $twig->setTwigHandler(
-             'define[@name="adminNote"]/element[@name="adminNote"]',
-             sub {
-                my ($twig, $el) = @_;
-                unless(exists $data_cats->{adminNote}){
-                    $el->delete;
-                    return;
-                }
-                #replace children with choices based on data categories
-                $el->cut_children;
-                my $adminNote_spec = $data_cats->{adminNote};
-                my $choice = XML::Twig::Elt->new('choice');
-                for my $data_cat(@{$adminNote_spec}){
-                    my $group = XML::Twig::Elt->new('group');
-                    XML::Twig::Elt->new('ref', { name => $data_cat->{datatype} })->
-                        paste($group);
-                    XML::Twig::Elt->parse(
-                        '<attribute name="type"><value>' .
-                        $data_cat->{name} .
-                        '</value></attribute>')->
-                        paste($group);
-                    $group->paste($choice);
-                 }
-                 $choice->paste($el);
-             }
-        );
-    # }
-    #TODO: start with admin and adminNote
+    for my $meta_type (qw(admin adminNote)){
+        $twig->setTwigHandler(_get_meta_cat_handler($meta_type, $data_cats));
+    }
+}
+
+sub _get_meta_cat_handler {
+    my ($meta_cat, $data_cats) = @_;
+    return ("define[\@name='$meta_cat']/element[\@name='$meta_cat']",
+        sub {
+           my ($twig, $el) = @_;
+           unless(exists $data_cats->{$meta_cat}){
+               $el->delete;
+               return;
+           }
+           #replace children with choices based on data categories
+           $el->cut_children;
+           my $admin_spec = $data_cats->{$meta_cat};
+           my $choice = XML::Twig::Elt->new('choice');
+           for my $data_cat(@{$admin_spec}){
+               my $group = XML::Twig::Elt->new('group');
+               XML::Twig::Elt->new('ref', { name => $data_cat->{datatype} })->
+                   paste($group);
+               XML::Twig::Elt->parse(
+                   '<attribute name="type"><value>' .
+                   $data_cat->{name} .
+                   '</value></attribute>')->
+                   paste($group);
+               $group->paste($choice);
+            }
+            $choice->paste($el);
+        }
+    );
 }
 
 =head2 C<core_structure_rng>
