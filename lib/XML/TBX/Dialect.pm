@@ -91,8 +91,8 @@ sub as_rng {
 	);
 
 	_add_language_handlers($twig, $xcs->get_languages());
-	# _add_rng_ref_objects($rng, $xcs->get_ref_objects());
-	# _add_rng_datacats($rng, $xcs->get_data_cats());
+	_add_ref_objects_handlers($twig, $xcs->get_ref_objects());
+	_add_data_cat_handlers($twig, $xcs->get_data_cats());
 
 	$twig->parsefile(_core_structure_rng_location());
 
@@ -115,20 +115,20 @@ sub _add_language_handlers {
 		sub {
 			my ($twig, $elt) = @_;
 			$choice->paste($elt);
-			warn $elt->sprint;
 		}
 	);
 	return;
 }
 
-sub _add_rng_ref_objects{
+sub _add_ref_objects_handlers{
 	my ($rng, $ref_objects) = @_;
 	#unimplemented
 }
 
 #add the language choices to the xml:lang attribute section
-sub _add_rng_datacats {
-	my ($rng, $datacats) = @_;
+sub _add_data_cat_handlers {
+	my ($twig, $datacats) = @_;
+	#TODO: start with admin and adminNote
 }
 
 =head2 C<core_structure_rng>
@@ -136,7 +136,6 @@ sub _add_rng_datacats {
 Returns a pointer to a string containing the TBX core structure (version 2) RNG.
 
 =cut
-
 
 sub core_structure_rng {
 	my $rng = read_file(_core_structure_rng_location());

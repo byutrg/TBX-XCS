@@ -1,7 +1,7 @@
 #make sure that the core structure RNG validates a TBX file
 use t::TestRNG;
 use Test::More 0.88;
-plan tests => 3;
+plan tests => 4;
 use XML::TBX::Dialect;
 use XML::Jing;
 use TBX::Checker qw(check);
@@ -18,7 +18,8 @@ for my $block(blocks){
 	note $block->name;
 	#create an RNG and write it to a temporary file
 	my $dialect = XML::TBX::Dialect->new();
-	my $xcs = $block->xcs;
+	my $xcs = $block->xcs
+		or next;
 	$dialect->set_xcs(file => path($corpus_dir, $xcs));
 	my $rng = $dialect->as_rng;
 	my $tmp = File::Temp->new();
@@ -27,13 +28,10 @@ for my $block(blocks){
 	my $jing = XML::Jing->new($tmp->filename);
 
 	for my $good( $block->good ){
-		my $error = $jing->validate( path($corpus_dir, $good) );
-		ok(!$error, "$good validates with $xcs RNG")
-			or note($error);
+		compare_validation($jing, path($corpus_dir, $good), 1);
 	}
 	for my $bad( $block->bad ){
-		my $error = $jing->validate( path($corpus_dir, $bad) );
-		ok($error, "$bad doesn't validate with $xcs RNG");
+		compare_validation($jing, path($corpus_dir, $bad), 0);
 	}
 }
 
@@ -50,15 +48,21 @@ sub compare_validation {
 			or note explain $messages;
 
 		my $error = $jing->validate($tbx_file);
-		ok(defined($error) == $expected, 'Core structure RNG')
+		ok(defined($error) != $expected, 'Core structure RNG')
 			or note $error;
 	};
 }
 
 __DATA__
-=== Specify langSet languages via XCS
+=== langSet languages
 --- xcs: small.xcs
 --- bad: langTestBad.tbx
 --- good lines chomp
 langTestGood.tbx
 langTestGood2.tbx
+
+=== adminNote
+# --- ONLY
+--- good: adminNote.tbx
+--- xcs
+adminNote.xcs
