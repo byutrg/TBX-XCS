@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More 0.88;
 plan tests => 6;
-use TBX::XCS;
+use XML::TBX::Dialect::XCS;
 use Path::Tiny;
 use FindBin qw($Bin);
 use File::Slurp;

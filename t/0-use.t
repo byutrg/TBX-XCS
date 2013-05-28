@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More 0.88;
 plan tests => 1;
-my $package = 'XML::TBX::Dialect';
+my $package = 'TBX::XCS';
 
 # require $package;
 # new_ok($package);
