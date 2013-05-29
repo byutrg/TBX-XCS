@@ -11,7 +11,8 @@ use Data::Dumper;
 
 =head1 SYNOPSIS
 
-    my $xcs = XML::Dialect::XCS->new(file=>'/path/to/file.xcs')
+    use TBX::XCS;
+    my $xcs = TBX::XCS->new(file=>'/path/to/file.xcs');
 
     my $languages = $xcs->get_languages();
     my $ref_objects = $xcs->get_ref_objects();
@@ -259,7 +260,7 @@ my $allowed_datatypes = do{
 
 #return an XML::Twig object which will extract data from an XCS file
 sub _init_twig {
-    return new XML::Twig(
+    return XML::Twig->new(
         pretty_print            => 'indented',
         # keep_original_prefix  => 1, #maybe; this may be bad because the JS code doesn't process namespaces yet
         output_encoding         => 'UTF-8',
@@ -319,6 +320,7 @@ sub _languages {
             $language->first_child('langName')->text;
     }
     $twig->{xcs_constraints}->{languages} = \%languages;
+    return;
 }
 
 #the reference objects that can be contained in the <back> tag
@@ -335,6 +337,7 @@ sub _refObjectDefSet {
     }
 
     $twig->{xcs_constraints}->{refObjects} = \%defSet;
+    return;
 }
 
 # all children of dataCatset
@@ -389,6 +392,7 @@ sub _dataCat {
     }
     #also, check page 10 of the OSCAR PDF for elements that can occur at multiple levels
     push @{ $twig->{xcs_constraints}->{datCatSet}->{$type} }, $data;
+    return;
 }
 
 1;
