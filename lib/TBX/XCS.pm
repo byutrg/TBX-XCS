@@ -1,4 +1,4 @@
-package XML::TBX::Dialect::XCS;
+package TBX::XCS;
 use strict;
 use warnings;
 use XML::Twig;

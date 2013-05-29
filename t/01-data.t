@@ -2,8 +2,8 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-plan tests => 6;
-use XML::TBX::Dialect::XCS;
+plan tests => 10;
+use TBX::XCS;
 use Path::Tiny;
 use FindBin qw($Bin);
 use File::Slurp;
@@ -12,7 +12,7 @@ my $corpus_dir = path($Bin, 'corpus');
 my $xcs_file = path($corpus_dir, 'small.xcs');
 my $xcs_contents = read_file($xcs_file);
 
-my $xcs = XML::TBX::Dialect::XCS->new();
+my $xcs = TBX::XCS->new();
 
 test_xcs_data('file',$xcs_file);
 test_xcs_data('string',\$xcs_contents);
@@ -39,6 +39,12 @@ sub test_xcs_data {
         get_expected_data_cat(),
         "Data categories extracted from $type"
     ) or note explain $xcs->get_data_cats();
+
+    is($xcs->get_title, 'Example XCS file',
+        "Title extracted from $type");
+
+    is($xcs->get_name, 'Small',
+        "Name extracted from $type");
 }
 
 sub get_expected_data_cat {
@@ -75,4 +81,4 @@ sub get_expected_data_cat {
     };
 }
 
-#TODO: test termCompLits warnings; test datatype warnings
+#TODO: test termCompList warnings; test datatype warnings
