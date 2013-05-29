@@ -8,7 +8,7 @@ use Data::Dumper;
 # VERSION
 
 # ABSTRACT: Extract data from an XCS file
-#
+
 =head1 SYNOPSIS
 
     my $xcs = XML::Dialect::XCS->new(file=>'/path/to/file.xcs')
@@ -26,6 +26,8 @@ be able to serialize the contained information into a new XCS file.
 
 #default: read XCS file and dump data to STDOUT
 __PACKAGE__->new()->_run unless caller;
+
+=head1 METHODS
 
 =head2 C<new>
 
@@ -53,7 +55,7 @@ sub parse {
 
     $self->_init;
     if(exists $args{file}){
-        unless(-e $args{file}){
+        if(not -e $args{file}){
             croak "file does not exist: $args{file}";
         }
         $self->{twig}->parsefile( $args{file} );
@@ -63,22 +65,133 @@ sub parse {
         croak 'Need to specify either a file or a string pointer with XCS contents';
     }
     $self->{xcs_constraints} = $self->{twig}->{xcs_constraints};
+    $self->{xcs_name} = $self->{twig}->{xcs_name};
+    $self->{xcs_title} = $self->{twig}->{xcs_title};
     return;
 }
+
+=head2 C<get_languages>
+
+Returns a pointer to a hash containing the languages allowed in the C<langSet xml:lang>
+attribute, as specified by the XCS C<languages> element. The keys are abbreviations, values
+the full names of the languages.
+
+=cut
 
 sub get_languages {
     my ($self) = @_;
     return $self->{xcs_constraints}->{languages};
 }
 
+=head2 C<get_ref_objects>
+
+Returns a pointer to a hash containing the reference objects
+specified by the XCS. For example, the XML below:
+
+    <refObjectDef>
+        <refObjectType>Foo</refObjectType>
+            <itemSpecSet type="validItemType">
+                <itemSpec type="validItemType">data</itemSpec>
+                <itemSpec type="validItemType">name</itemSpec>
+            </itemSpecSet>
+        </refObjectDef>
+    </refObjectDefSet>
+
+will yield the following structure:
+
+{ Foo => ['data', 'name'] },
+
+=cut
+
 sub get_ref_objects {
     my ($self) = @_;
     return $self->{xcs_constraints}->{refObjects} ;
 }
 
+=head2 C<get_data_cats>
+
+Returns a hash pointer containing the data category specifications. For example,
+the XML below:
+
+    <datCatSet>
+        <descripSpec name="context" datcatId="ISO12620A-0503">
+            <contents/>
+            <levels>term</levels>
+        </descripSpec>
+        <descripSpec name="descripFoo" datcatId="">
+            <contents/>
+            <levels/>
+        </descripSpec>
+        <termNoteSpec name="animacy" datcatId="ISO12620A-020204">
+            <contents datatype="picklist" forTermComp="yes">animate inanimate
+            otherAnimacy</contents>
+        </termNoteSpec>
+        <xrefSpec name="xrefFoo" datcatId="">
+            <contents targetType="external"/>
+        </xrefSpec>
+
+    </datCatSet>
+
+would yield the data structure below:
+
+    {
+      'descrip' =>
+      [
+        {
+          'datatype' => 'noteText',
+          'datcatId' => 'ISO12620A-0503',
+          'levels' => ['term'],
+          'name' => 'context'
+        },
+        {
+          'datatype' => 'noteText',
+          'datcatId' => '',
+          'levels' => ['langSet', 'termEntry', 'term'],
+          'name' => 'descripFoo'
+        }
+      ],
+      'termNote' => [{
+          'choices' => ['animate', 'inanimate', 'otherAnimacy'],
+          'datatype' => 'picklist',
+          'datcatId' => 'ISO12620A-020204',
+          'forTermComp' => 1,
+          'name' => 'animacy'
+        }],
+      'xref' => [{
+          'datatype' => 'plainText',
+          'datcatId' => '',
+          'name' => 'xrefFoo',
+          'targetType' => 'external'
+        }]
+    };
+
+=cut
+
 sub get_data_cats {
     my ($self) = @_;
     return $self->{xcs_constraints}->{datCatSet};
+}
+
+=head2 C<get_title>
+
+Returns the title of the document, as contained in the title element.
+
+=cut
+
+sub get_title {
+    my ($self) = @_;
+    return $self->{xcs_title};
+}
+
+=head2 C<get_name>
+
+Returns the name of the XCS file, as found in the TBXXCS element.
+
+=cut
+
+sub get_name {
+    my ($self) = @_;
+    return $self->{xcs_name};
 }
 
 sub _init {
@@ -149,9 +262,15 @@ sub _init_twig {
         do_not_chain_handlers   => 1, #can be important when things get complicated
         keep_spaces             => 0,
         TwigHandlers            => {
-            TBXXCS          => sub {},
-            title           => sub {},
+            TBXXCS          => sub {$_[0]->{xcs_name} = $_->att('name')},
+            title           => sub {$_[0]->{xcs_title} = $_->text},
             header          => sub {},
+            #TODO: add handlers for these
+            datCatDoc       => sub {},
+            datCatMap       => sub {},
+            datCatDisplay   => sub {},
+            datCatNote      => sub {},
+            datCatToken     => sub {},
 
             languages       => \&_languages,
             langCode        => sub {},
@@ -266,3 +385,25 @@ sub _dataCat {
     #also, check page 10 of the OSCAR PDF for elements that can occur at multiple levels
     push @{ $twig->{xcs_constraints}->{datCatSet}->{$type} }, $data;
 }
+
+1;
+
+__END__
+
+=head1 FUTURE WORK
+
+=over 2
+
+=item * extract C<datCatDoc>
+
+=item * extract C<refObjectDefSet>
+
+=item * Setter methods for XCS data
+
+=item * Print an XCS file
+
+=back
+
+=head1 SEE ALSO
+
+The XCS and the TBX specification can be found on L<GitHub|https://github.com/byutrg/TBX-Spec/blob/master/TBX-Default/TBX_spec_OSCAR.pdf>.
