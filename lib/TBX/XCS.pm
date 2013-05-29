@@ -70,6 +70,20 @@ sub parse {
     return;
 }
 
+sub _init {
+    my ($self) = @_;
+    $self->{twig}->{xcs_constraints} = {};
+    $self->{twig} = _init_twig();
+    return;
+}
+
+sub _run {
+    my ($self, $file) = @_;
+    $self->parse(file => $file);
+    print Dumper $self->{twig}->{xcs_constraints};
+    return;
+}
+
 =head2 C<get_languages>
 
 Returns a pointer to a hash containing the languages allowed in the C<langSet xml:lang>
@@ -194,20 +208,6 @@ sub get_name {
     return $self->{xcs_name};
 }
 
-sub _init {
-    my ($self) = @_;
-    $self->{twig}->{xcs_constraints} = {};
-    $self->{twig} = _init_twig();
-    return;
-}
-
-sub _run {
-    my ($self, $file) = @_;
-    $self->parse(file => $file);
-    print Dumper $self->{twig}->{xcs_constraints};
-    return;
-}
-
 # these are taken from the core structure DTD
 # the types are listed on pg 12 of TBX_spec_OSCAR.pdf
 # TODO: maybe they should be extracted
@@ -233,22 +233,26 @@ my $allowed_datatypes = do{
     #what datatypes can become what other datatypes?
     my %datatype_heirarchy = (
         noteText    => {
+            'noteText' => 1,
             'basicText' => 1,
             'plainText' => 1,
             'picklist'  => 1,
             },
         basicText   => {
+            'basicText' => 1,
             'plainText' => 1,
             'picklist'  => 1,
         },
         plainText   => {
+            'plainText' => 1,
             'picklist'  => 1,
         },
     );
 
     my $allowed_datatypes = {};
     for my $category (keys %default_datatype){
-        $allowed_datatypes->{$category} = $datatype_heirarchy{ $default_datatype{$category} };
+        $allowed_datatypes->{$category} =
+            $datatype_heirarchy{ $default_datatype{$category} };
     }
     $allowed_datatypes;
 };
@@ -355,7 +359,8 @@ sub _dataCat {
         }
         elsif(! exists $allowed_datatypes->{$type}->{$datatype} ){
             croak "Can't set datatype of $type to $datatype. Must be " .
-                join (' or ', keys %{ $allowed_datatypes->{$type}->{$datatype} }) . '.';
+                join (' or ',
+                    keys %{ $allowed_datatypes->{$type} } ) . '.';
         }
     }else{
         $datatype = $default_datatype{$type};
