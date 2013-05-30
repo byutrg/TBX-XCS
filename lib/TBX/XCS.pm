@@ -387,6 +387,10 @@ sub _dataCat {
     if($type eq 'descrip'){
         if(my $levels = $el->first_child('levels')->text){
             $data->{levels} = [split ' ', $levels];
+            if(!_levels_ok($data->{levels})){
+                croak "Bad levels in descrip[\@name=$data->{name}]. " .
+                    '<levels> may only include term, termEntry, and langSet';
+            }
         }else{
             #todo: not sure if this is the right behavior for an empty <levels/>
             $data->{levels} = [qw(langSet termEntry term)]
@@ -395,6 +399,13 @@ sub _dataCat {
     #also, check page 10 of the OSCAR PDF for elements that can occur at multiple levels
     push @{ $twig->{xcs_constraints}->{datCatSet}->{$type} }, $data;
     return;
+}
+
+#verify the contents of <levels>
+sub _levels_ok {
+    my ($levels) = @_;
+    my @invalid = grep { $_ !~ /^(?:term|termEntry|langSet)$/ } @$levels;
+    return (@invalid == 0);
 }
 
 1;

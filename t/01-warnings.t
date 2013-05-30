@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-plan tests => 4;
+plan tests => 5;
 use Test::Warn;
 use Test::Exception;
 use TBX::XCS;
@@ -13,6 +13,7 @@ use File::Slurp;
 my $corpus_dir = path($Bin, 'corpus');
 my $termCompList_xcs_file = path($corpus_dir, 'termCompList.xcs');
 my $datatype_xcs_file = path($corpus_dir, 'datatype.xcs');
+my $levels_xcs_file = path($corpus_dir, 'levels.xcs');
 
 my $xcs = TBX::XCS->new();
 
@@ -32,4 +33,6 @@ throws_ok {$xcs->parse(file => $datatype_xcs_file)}
   qr/Can't set datatype of hi to noteText. Must be plainText or picklist/,
   'Exception thrown with illegal datatype';
 
-#TODO: test termCompList warnings; test datatype warnings
+throws_ok {$xcs->parse(file => $levels_xcs_file)}
+  qr/Bad levels in descrip/,
+  'Exception thrown with illegal <levels>';
