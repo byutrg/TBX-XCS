@@ -21,6 +21,9 @@
     </languages>
 
     <datCatSet>
+        <termCompListSpec name="termElement" datcatId="ISO12620A-020802">
+            <contents forTermComp="yes"/>
+        </termCompListSpec>
         <descripSpec name="context" datcatId="ISO12620A-0503">
             <contents/>
             <levels>term</levels>

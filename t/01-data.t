@@ -65,6 +65,13 @@ sub get_expected_data_cat {
           'name' => 'descripFoo'
         }
       ],
+  'termCompList' => [
+    {
+      'datcatId' => 'ISO12620A-020802',
+      'forTermComp' => 1,
+      'name' => 'termElement'
+    }
+  ],
       'termNote' => [{
           'choices' => ['animate', 'inanimate', 'otherAnimacy'],
           'datatype' => 'picklist',

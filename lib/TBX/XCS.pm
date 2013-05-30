@@ -368,10 +368,12 @@ sub _dataCat {
     }else{
         $datatype = $default_datatype{$type};
     }
-    $data->{datatype} = $datatype;
-
-    if($datatype eq 'picklist'){
-        $data->{choices} = [split ' ', $contents->text];
+    #ignore datatypes for termCompList
+    if($type ne 'termCompList'){
+        $data->{datatype} = $datatype;
+        if($datatype eq 'picklist'){
+            $data->{choices} = [split ' ', $contents->text];
+        }
     }
     if ($contents->att('forTermComp')){
         $data->{forTermComp} = $contents->att('forTermComp') eq 'yes' ? 1 : 0;
