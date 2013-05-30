@@ -346,7 +346,9 @@ sub _dataCat {
     (my $type = $el->tag) =~ s/Spec$//;
     my $data = {};
     $data->{name} = $el->att('name');
-    $data->{datcatId} = $el->att('datcatId');
+    if( my $datCatId = $el->att('datcatId') ){
+        $data->{datCatId} = $datCatId;
+    }
     #If the data-category does not take a picklist,
     #if its data type is the same as that defined for the meta data element in the core-structure DTD,
     #if its meta data element does not take a target attribute, and
