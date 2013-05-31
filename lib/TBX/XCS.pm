@@ -352,7 +352,8 @@ sub _dataCat {
     #if its meta data element does not take a target attribute, and
     #if it does not apply to term components,
     #this element will be empty and have no attributes specified.
-    my $contents = $el->first_child('contents');
+    my $contents = $el->first_child('contents')
+        or croak 'No contents element in ' . $el->tag . '[@name=' . $el->att('name') . ']';
 
     #check restrictions on datatypes
     my $datatype = $contents->att('datatype');

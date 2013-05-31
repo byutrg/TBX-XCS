@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-plan tests => 5;
+plan tests => 6;
 use Test::Warn;
 use Test::Exception;
 use TBX::XCS;
@@ -14,6 +14,7 @@ my $corpus_dir = path($Bin, 'corpus');
 my $termCompList_xcs_file = path($corpus_dir, 'termCompList.xcs');
 my $datatype_xcs_file = path($corpus_dir, 'datatype.xcs');
 my $levels_xcs_file = path($corpus_dir, 'levels.xcs');
+my $contents_xcs_file = path($corpus_dir, 'contents.xcs');
 
 my $xcs = TBX::XCS->new();
 
@@ -36,3 +37,7 @@ throws_ok {$xcs->parse(file => $datatype_xcs_file)}
 throws_ok {$xcs->parse(file => $levels_xcs_file)}
   qr/Bad levels in descrip/,
   'Exception thrown with illegal <levels>';
+
+throws_ok {$xcs->parse(file => $contents_xcs_file)}
+  qr/No contents element/,
+  'Exception thrown when missing <contents>';
