@@ -1,6 +1,8 @@
 Revision history for TBX-XCS
 
 {{$NEXT}}
+
+0.02      2013-05-30 18:24:55 America/Los_Angeles
     Validate contents of <levels>
     Fix problem where termCompList was expected to have a datatype
     datCatId is no longer generated if it doesn't exist
