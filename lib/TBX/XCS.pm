@@ -26,13 +26,13 @@ be able to serialize the contained information into a new XCS file.
 =cut
 
 #default: read XCS file and dump data to STDOUT
-__PACKAGE__->new()->_run unless caller;
+__PACKAGE__->new()->_run(@ARGV) unless caller;
 
 =head1 METHODS
 
 =head2 C<new>
 
-Creates a new XML::TBX::Dialect::XCS object.
+Creates a new TBX::XCS object.
 
 =cut
 
@@ -65,9 +65,9 @@ sub parse {
     }else{
         croak 'Need to specify either a file or a string pointer with XCS contents';
     }
-    $self->{xcs_constraints} = $self->{twig}->{xcs_constraints};
-    $self->{xcs_name} = $self->{twig}->{xcs_name};
-    $self->{xcs_title} = $self->{twig}->{xcs_title};
+    $self->{constraints} = $self->{twig}->{xcs_constraints};
+    $self->{name} = $self->{twig}->{xcs_name};
+    $self->{title} = $self->{twig}->{xcs_title};
     return;
 }
 
@@ -81,7 +81,7 @@ sub _init {
 sub _run {
     my ($self, $file) = @_;
     $self->parse(file => $file);
-    print Dumper $self->{twig}->{xcs_constraints};
+    print Dumper $self->{constraints};
     return;
 }
 
@@ -95,7 +95,7 @@ the full names of the languages.
 
 sub get_languages {
     my ($self) = @_;
-    return $self->{xcs_constraints}->{languages};
+    return $self->{constraints}->{languages};
 }
 
 =head2 C<get_ref_objects>
@@ -120,7 +120,7 @@ will yield the following structure:
 
 sub get_ref_objects {
     my ($self) = @_;
-    return $self->{xcs_constraints}->{refObjects} ;
+    return $self->{constraints}->{refObjects} ;
 }
 
 =head2 C<get_data_cats>
@@ -182,7 +182,7 @@ would yield the data structure below:
 
 sub get_data_cats {
     my ($self) = @_;
-    return $self->{xcs_constraints}->{datCatSet};
+    return $self->{constraints}->{datCatSet};
 }
 
 =head2 C<get_title>
@@ -193,7 +193,7 @@ Returns the title of the document, as contained in the title element.
 
 sub get_title {
     my ($self) = @_;
-    return $self->{xcs_title};
+    return $self->{title};
 }
 
 =head2 C<get_name>
@@ -204,7 +204,7 @@ Returns the name of the XCS file, as found in the TBXXCS element.
 
 sub get_name {
     my ($self) = @_;
-    return $self->{xcs_name};
+    return $self->{name};
 }
 
 # these are taken from the core structure DTD
@@ -429,4 +429,5 @@ __END__
 
 =head1 SEE ALSO
 
-The XCS and the TBX specification can be found on L<GitHub|https://github.com/byutrg/TBX-Spec/blob/master/TBX-Default/TBX_spec_OSCAR.pdf>.
+The XCS and the TBX specification can be found on
+L<GitHub|https://github.com/byutrg/TBX-Spec/blob/master/TBX-Default/TBX_spec_OSCAR.pdf>.
