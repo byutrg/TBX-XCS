@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use XML::Twig;
 use feature 'say';
+use JSON;
 use Carp;
 use Data::Dumper;
 # VERSION
@@ -42,6 +43,17 @@ sub new {
     return $self;
 }
 
+# Creates a new TBX::XCS object from a JSON structure.
+# ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING; no
+# checks are done for correct structure, so you'd better
+# know what the correct structure is. This is meant to be
+# a private method.
+sub _new_from_json {
+    my ($class, $json) = @_;
+    my $struct  = decode_json $json;
+    return bless $struct, $class;
+}
+
 =head2 C<parse>
 
 Takes a named argument, either C<file> for a filename or C<string> for a string pointer.
@@ -65,9 +77,9 @@ sub parse {
     }else{
         croak 'Need to specify either a file or a string pointer with XCS contents';
     }
-    $self->{constraints} = $self->{twig}->{xcs_constraints};
-    $self->{name} = $self->{twig}->{xcs_name};
-    $self->{title} = $self->{twig}->{xcs_title};
+    $self->{data}->{constraints} = $self->{twig}->{xcs_constraints};
+    $self->{data}->{name} = $self->{twig}->{xcs_name};
+    $self->{data}->{title} = $self->{twig}->{xcs_title};
     return;
 }
 
@@ -95,7 +107,7 @@ the full names of the languages.
 
 sub get_languages {
     my ($self) = @_;
-    return $self->{constraints}->{languages};
+    return $self->{data}->{constraints}->{languages};
 }
 
 =head2 C<get_ref_objects>
@@ -120,7 +132,7 @@ will yield the following structure:
 
 sub get_ref_objects {
     my ($self) = @_;
-    return $self->{constraints}->{refObjects} ;
+    return $self->{data}->{constraints}->{refObjects} ;
 }
 
 =head2 C<get_data_cats>
@@ -182,7 +194,7 @@ would yield the data structure below:
 
 sub get_data_cats {
     my ($self) = @_;
-    return $self->{constraints}->{datCatSet};
+    return $self->{data}->{constraints}->{datCatSet};
 }
 
 =head2 C<get_title>
@@ -193,7 +205,18 @@ Returns the title of the document, as contained in the title element.
 
 sub get_title {
     my ($self) = @_;
-    return $self->{title};
+    return $self->{data}->{title};
+}
+
+=head2 C<as_json>
+
+Returns all of the XCS data in JSON format.
+
+=cut
+
+sub as_json {
+    my ($self) = @_;
+    return to_json($self->{data}, {utf8 => 1, pretty => 1});
 }
 
 =head2 C<get_name>
@@ -204,7 +227,7 @@ Returns the name of the XCS file, as found in the TBXXCS element.
 
 sub get_name {
     my ($self) = @_;
-    return $self->{name};
+    return $self->{data}->{name};
 }
 
 # these are taken from the core structure DTD
