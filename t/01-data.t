@@ -2,7 +2,8 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-plan tests => 10;
+plan tests => 11;
+use Test::NoWarnings;
 use TBX::XCS;
 use Path::Tiny;
 use FindBin qw($Bin);

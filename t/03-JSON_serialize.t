@@ -2,7 +2,8 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-plan tests => 1;
+plan tests => 2;
+use Test::NoWarnings;
 use TBX::XCS;
 use TBX::XCS::JSON qw(json_from_xcs);
 use Path::Tiny;
@@ -84,3 +85,4 @@ my $actual = decode_json json_from_xcs($xcs);
 
 is_deeply($actual, $expected, 'Correct JSON structure')
   or note explain $actual;
+print json_from_xcs($xcs);

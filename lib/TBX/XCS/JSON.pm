@@ -56,7 +56,7 @@ C<undef> will be returned.
 sub xcs_from_json {
     my ($json) = @_;
     my $struct  = decode_json $json;
-    check_structure($struct);
+    _check_structure($struct);
     my $xcs = {};
     $xcs->{data} = $struct;
     return bless $xcs, 'TBX::XCS';
@@ -65,11 +65,11 @@ sub xcs_from_json {
 sub _check_structure {
     my ($struct) = @_;
     if(exists $struct->{constraints}){
-        _check_refObjects($struct->{constraints});
         _check_languages($struct->{constraints});
+        _check_refObjects($struct->{constraints});
         _check_datCatSet($struct->{constraints});
     }else{
-        croak "no constraints key specified";
+        croak 'no constraints key specified';
     }
     if(ref $struct->{name}){
         croak 'name value should be a plain string';
@@ -87,7 +87,7 @@ sub _check_languages {
             or croak '"languages" value should be a hash of ' .
                 'language abbreviations and names';
     }else{
-        croak 'no "languages key in constraints value';
+        croak 'no "languages" key in constraints value';
     }
     return;
 }
@@ -100,11 +100,16 @@ sub _check_refObjects {
     if('HASH' ne ref $refObjects){
         croak "refObjects should be a hash";
     };
+    #empty means none allowed
+    if(!keys %$refObjects){
+        return;
+    }
     for (keys %$refObjects) {
-        croak "Reference object '$_' is not an array"
+        croak "Reference object $_ is not an array"
             unless 'ARRAY' eq ref $refObjects->{$_};
-        for(@{ $refObjects->{$_} }){
-            croak "Reference object $_ should refer to an array of strings";
+        for my $element (@{ $refObjects->{$_} }){
+            croak "Reference object $_ should refer to an array of strings"
+                if(ref $element);
         }
     }
     return;
@@ -116,6 +121,9 @@ sub _check_datCatSet {
         croak 'Missing key "datCatSet"';
     }
     my $datCatSet = $constraints->{datCatSet};
+    if(!keys %$datCatSet){
+        croak "data category $_ should not be empty"
+    }
     for (keys %$datCatSet){
         if(ref $datCatSet->{$_} ne 'ARRAY'){
             croak "data category '$_' should be an array";
