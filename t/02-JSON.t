@@ -4,6 +4,7 @@ use warnings;
 use Test::More 0.88;
 plan tests => 1;
 use TBX::XCS;
+use TBX::XCS::JSON qw(json_from_xcs);
 use Path::Tiny;
 use FindBin qw($Bin);
 use File::Slurp;
@@ -79,7 +80,7 @@ my $expected = {
    'name' => 'Small',
    'title' => 'Example XCS file'
 };
-my $actual = decode_json $xcs->as_json();
+my $actual = decode_json json_from_xcs($xcs);
 
 is_deeply($actual, $expected, 'Correct JSON structure')
   or note explain $actual;

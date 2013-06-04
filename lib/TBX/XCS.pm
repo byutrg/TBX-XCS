@@ -5,6 +5,8 @@ use XML::Twig;
 use feature 'say';
 use JSON;
 use Carp;
+#carp from calling package, not from here
+our @CARP_NOT = qw(TBX::XCS TBX::XCS::JSON);
 use Data::Dumper;
 # VERSION
 
@@ -38,20 +40,12 @@ Creates a new TBX::XCS object.
 =cut
 
 sub new {
-    my ($class) = @_;
+    my ($class, @args) = @_;
     my $self = bless {}, $class;
+    if(@args){
+        $self->parse(@args);
+    }
     return $self;
-}
-
-# Creates a new TBX::XCS object from a JSON structure.
-# ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING; no
-# checks are done for correct structure, so you'd better
-# know what the correct structure is. This is meant to be
-# a private method.
-sub _new_from_json {
-    my ($class, $json) = @_;
-    my $struct  = decode_json $json;
-    return bless $struct, $class;
 }
 
 =head2 C<parse>
@@ -93,7 +87,7 @@ sub _init {
 sub _run {
     my ($self, $file) = @_;
     $self->parse(file => $file);
-    print Dumper $self->{constraints};
+    print Dumper $self->{data}->{constraints};
     return;
 }
 
@@ -208,17 +202,6 @@ sub get_title {
     return $self->{data}->{title};
 }
 
-=head2 C<as_json>
-
-Returns all of the XCS data in JSON format.
-
-=cut
-
-sub as_json {
-    my ($self) = @_;
-    return to_json($self->{data}, {utf8 => 1, pretty => 1});
-}
-
 =head2 C<get_name>
 
 Returns the name of the XCS file, as found in the TBXXCS element.
@@ -229,6 +212,20 @@ sub get_name {
     my ($self) = @_;
     return $self->{data}->{name};
 }
+
+my @meta_data_cats = qw(
+    adminNote
+    admin
+    descrip
+    descripNote
+    hi
+    ref
+    termNote
+    transac
+    transacNote
+    xref
+    termCompList
+);
 
 # these are taken from the core structure DTD
 # the types are listed on pg 12 of TBX_spec_OSCAR.pdf
@@ -365,6 +362,7 @@ sub _refObjectDefSet {
 sub _dataCat {
     my ($twig, $el) = @_;
     (my $type = $el->tag) =~ s/Spec$//;
+    _check_meta_cat($type);
     my $data = {};
     $data->{name} = $el->att('name');
     if( my $datCatId = $el->att('datcatId') ){
@@ -384,10 +382,8 @@ sub _dataCat {
         if($type eq 'termCompList'){
             carp 'Ignoring datatype value in termCompList contents element';
         }
-        elsif(! exists $allowed_datatypes->{$type}->{$datatype} ){
-            croak "Can't set datatype of $type to $datatype. Must be " .
-                join (' or ',
-                    keys %{ $allowed_datatypes->{$type} } ) . '.';
+        else{
+            _check_datatype($type, $datatype);
         }
     }else{
         $datatype = $default_datatype{$type};
@@ -411,10 +407,7 @@ sub _dataCat {
     if($type eq 'descrip'){
         if(my $levels = $el->first_child('levels')->text){
             $data->{levels} = [split ' ', $levels];
-            if(!_levels_ok($data->{levels})){
-                croak "Bad levels in descrip[\@name=$data->{name}]. " .
-                    '<levels> may only include term, termEntry, and langSet';
-            }
+            _check_levels($data);
         }else{
             #todo: not sure if this is the right behavior for an empty <levels/>
             $data->{levels} = [qw(langSet termEntry term)]
@@ -425,11 +418,33 @@ sub _dataCat {
     return;
 }
 
+sub _check_meta_cat {
+    my ($meta_cat) = @_;
+    if(! grep {$_ eq $meta_cat} @meta_data_cats ){
+        croak "Unknown meta data category: $meta_cat";
+    }
+    return;
+}
+
+sub _check_datatype {
+    my ($meta_cat, $datatype) = @_;
+    if(! exists $allowed_datatypes->{$meta_cat}->{$datatype} ){
+        croak "Can't set datatype of $meta_cat to $datatype. Must be " .
+            join (' or ',
+                keys %{ $allowed_datatypes->{$meta_cat} } ) . '.';
+    }
+    return;
+}
+
 #verify the contents of <levels>
-sub _levels_ok {
-    my ($levels) = @_;
-    my @invalid = grep { $_ !~ /^(?:term|termEntry|langSet)$/ } @$levels;
-    return (@invalid == 0);
+sub _check_levels {
+    my ($data) = @_;
+    my @invalid =
+        grep { $_ !~ /^(?:term|termEntry|langSet)$/ } @{$data->{levels}};
+    if(@invalid){
+        croak "Bad levels in descrip[\@name=$data->{name}]. " .
+            '<levels> may only include term, termEntry, and langSet';
+    }
 }
 
 1;
