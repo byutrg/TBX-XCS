@@ -21,25 +21,10 @@
     </languages>
 
     <datCatSet>
-        <termCompListSpec name="termElement" datcatId="ISO12620A-020802">
-            <contents forTermComp="yes"/>
+        <termCompListSpec name="morphemes" >
+            <!-- Though legal, datatype here is useless and misleading -->
+            <contents datatype="basicText"/>
         </termCompListSpec>
-        <descripSpec name="context" datcatId="ISO12620A-0503">
-            <contents/>
-            <levels>term</levels>
-        </descripSpec>
-        <descripSpec name="descripFoo" datcatId="">
-            <contents/>
-            <levels/>
-        </descripSpec>
-        <termNoteSpec name="animacy" datcatId="ISO12620A-020204">
-            <contents datatype="picklist" forTermComp="yes">animate inanimate
-            otherAnimacy</contents>
-        </termNoteSpec>
-        <xrefSpec name="xrefFoo" datcatId="">
-            <contents targetType="external"/>
-        </xrefSpec>
-
     </datCatSet>
 
     <refObjectDefSet>

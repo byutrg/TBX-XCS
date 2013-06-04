@@ -1,4 +1,10 @@
-Revision history for XML-TBX-Dialect
+Revision history for TBX-XCS
 
 {{$NEXT}}
+    Croak with missing <contents> element
+0.02      2013-05-30 18:24:55 America/Los_Angeles
+    Validate contents of <levels>
+    Fix problem where termCompList was expected to have a datatype
+    datCatId is no longer generated if it doesn't exist
+0.01      2013-05-28 18:59:05 America/Los_Angeles
 	initial release

@@ -21,24 +21,9 @@
     </languages>
 
     <datCatSet>
-        <termCompListSpec name="termElement" datcatId="ISO12620A-020802">
-            <contents forTermComp="yes"/>
-        </termCompListSpec>
-        <descripSpec name="context" datcatId="ISO12620A-0503">
-            <contents/>
-            <levels>term</levels>
-        </descripSpec>
-        <descripSpec name="descripFoo" datcatId="">
-            <contents/>
-            <levels/>
-        </descripSpec>
-        <termNoteSpec name="animacy" datcatId="ISO12620A-020204">
-            <contents datatype="picklist" forTermComp="yes">animate inanimate
-            otherAnimacy</contents>
-        </termNoteSpec>
-        <xrefSpec name="xrefFoo" datcatId="">
-            <contents targetType="external"/>
-        </xrefSpec>
+        <hiSpec name="hiFoo" datcatId="">
+            <contents datatype="noteText"/>
+        </hiSpec>
 
     </datCatSet>
 
