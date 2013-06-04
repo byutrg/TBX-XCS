@@ -147,7 +147,7 @@ __DATA__
    }
 }
 
-=== bad refObject structure
+=== refObject not an array
 --- croak: Reference object foo is not an array
 --- json
 {
@@ -172,8 +172,7 @@ __DATA__
    }
 }
 
-
-=== bad refObject structure
+=== refObject array element not a scalar
 --- croak: Reference object foo should refer to an array of strings
 --- json
 {
@@ -194,6 +193,78 @@ __DATA__
                "name" : "xrefFoo",
                "targetType" : "external",
                "datatype" : "plainText"
+            }
+         ]
+      }
+   }
+}
+
+=== missing data category set
+--- croak: "constraints" is missing key "datCatSet"
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "d-cat-set" : {
+         "xref" : [
+            {
+               "name" : "xrefFoo",
+               "targetType" : "external",
+               "datatype" : "plainText"
+            }
+         ]
+      }
+   }
+}
+
+=== empty data cat set
+--- croak: datCatSet should not be empty
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {}
+   }
+}
+
+=== bad data category structure
+--- croak: data category 'xref' should be an array
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "xref" : {}
+      }
+   }
+}
+
+=== bad meta data category name
+--- croak: unknown meta data category: foo
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "foo" : [
+            {
+
             }
          ]
       }

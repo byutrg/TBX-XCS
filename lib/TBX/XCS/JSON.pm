@@ -118,22 +118,33 @@ sub _check_refObjects {
 sub _check_datCatSet {
     my ($constraints) = @_;
     if(!exists $constraints->{datCatSet}){
-        croak 'Missing key "datCatSet"';
+        croak '"constraints" is missing key "datCatSet"';
     }
     my $datCatSet = $constraints->{datCatSet};
     if(!keys %$datCatSet){
-        croak "data category $_ should not be empty"
+        croak 'datCatSet should not be empty';
     }
-    for (keys %$datCatSet){
-        if(ref $datCatSet->{$_} ne 'ARRAY'){
-            croak "data category '$_' should be an array";
-            _check_data_category($_, $datCatSet->{$_});
-        }
+    for my $meta_cat (keys %$datCatSet){
+        my $data_cats = $datCatSet->{$meta_cat};
+        _check_meta_cat($meta_cat, $data_cats);
+    }
+}
+
+sub _check_meta_cat {
+    my ($meta_cat, $data_cats) = @_;
+    if(ref $data_cats ne 'ARRAY'){
+        croak "meta data category '$meta_cat' should be an array";
+    }
+    for my $data_cat (@$data_cats){
+        _check_data_category($meta_cat, $data_cat);
     }
 }
 
 sub _check_data_category {
     my ($meta_cat, $data_cat) = @_;
+    if( ref $data_cat ne 'HASH'){
+        croak "data category for $meta_cat should be a hash";
+    }
     TBX::XCS::_check_meta_cat($meta_cat);
     if(!exists $data_cat->{name}){
         croak "missing name in data category '$_'";

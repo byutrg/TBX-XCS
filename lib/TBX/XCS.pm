@@ -421,7 +421,7 @@ sub _dataCat {
 sub _check_meta_cat {
     my ($meta_cat) = @_;
     if(! grep {$_ eq $meta_cat} @meta_data_cats ){
-        croak "Unknown meta data category: $meta_cat";
+        croak "unknown meta data category: $meta_cat";
     }
     return;
 }
