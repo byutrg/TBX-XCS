@@ -27,7 +27,7 @@ This module allows you to work with XCS data in JSON format.
 =cut
 
 #default: read XCS file and dump JSON data to STDOUT
-json_from_xcs(TBX::XCS->new(file => $ARGV[0]))
+print json_from_xcs(TBX::XCS->new(file => $ARGV[0]))
     unless caller;
 
 =head1 METHODS
