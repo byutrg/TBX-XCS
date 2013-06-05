@@ -508,27 +508,6 @@ __DATA__
    }
 }
 
-=== disallowed forTermComp
---- croak: only termNote data categories can have 'forTermComp'
---- json
-{
-   "constraints" : {
-      "languages" : {
-         "en" : "English",
-         "fr" : "French",
-         "de" : "German"
-      },
-      "datCatSet" : {
-         "xref" : [
-            {
-               "name" : "foo",
-               "forTermComp" : true
-            }
-         ]
-      }
-   }
-}
-
 === non-boolean forTermComp
 --- croak: forTermComp should be either true or false
 --- json

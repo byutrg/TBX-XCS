@@ -173,8 +173,6 @@ sub _check_data_category {
             if(ref $data_cat->{targetType});
     }
     if(exists $data_cat->{forTermComp}){
-        croak "only termNote data categories can have 'forTermComp'"
-            unless $meta_cat eq 'termNote';
         if( !JSON::is_bool($data_cat->{forTermComp}) ){
             croak "forTermComp should be either true or false"
         }
