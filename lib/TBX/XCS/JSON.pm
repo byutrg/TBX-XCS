@@ -49,7 +49,11 @@ sub json_from_xcs {
 Returns a new XCS object created from an input JSON string. The JSON
 structure is checked for validity; it should follow the same structure
 as that created by json_from_xcs. If the input structure is invalid,
-C<undef> will be returned.
+this method will croak.
+
+Although all structure is checked for correctness, in many instances extra
+values do not invalidate the input; therefore, comments and the like can
+be inserted without error.
 
 =cut
 
@@ -132,6 +136,7 @@ sub _check_datCatSet {
 
 sub _check_meta_cat {
     my ($meta_cat, $data_cats) = @_;
+    TBX::XCS::_check_meta_cat($meta_cat);
     if(ref $data_cats ne 'ARRAY'){
         croak "meta data category '$meta_cat' should be an array";
     }
@@ -145,24 +150,36 @@ sub _check_data_category {
     if( ref $data_cat ne 'HASH'){
         croak "data category for $meta_cat should be a hash";
     }
-    TBX::XCS::_check_meta_cat($meta_cat);
     if(!exists $data_cat->{name}){
-        croak "missing name in data category '$_'";
+        croak "missing name in data category of $meta_cat";
     }
     _check_datatype($meta_cat, $data_cat);
-    if($data_cat eq 'descrip'){
+    if($meta_cat eq 'descrip'){
+        if(! exists $data_cat->{levels}){
+            croak "missing levels for $data_cat->{name}";
+        }
+        for my $level (@{ $data_cat->{levels} }){
+            croak "levels in $data_cat->{name} should be single values"
+                if ref $level;
+        }
         TBX::XCS::_check_levels($data_cat);
+        for my $level (@{ $data_cat->{levels} }){
+            croak "levels in $data_cat->{name} should be single values"
+                if ref $level;
+        }
     }
     if(exists $data_cat->{targetType}){
         croak "targetType of $data_cat->{name} should be a string"
             if(ref $data_cat->{targetType});
     }
     if(exists $data_cat->{forTermComp}){
-        croak "only termNote data categories can have 'forTermComp'";
-        if($data_cat->{forTermComp} != 1 and
-            $data_cat->{forTermComp} != 0){
+        croak "only termNote data categories can have 'forTermComp'"
+            unless $meta_cat eq 'termNote';
+        if( !JSON::is_bool($data_cat->{forTermComp}) ){
             croak "forTermComp should be either true or false"
         }
+        $data_cat->{forTermComp} =
+            ($data_cat->{forTermComp} == JSON::true) ? 1 : 0;
     }
 }
 
@@ -173,13 +190,14 @@ sub _check_datatype {
         croak "termCompList cannot contain datatype"
             if $datatype;
     }else{
-        croak "$meta_cat must contain datatype"
-            unless $datatype;
-        TBX::XCS::_check_datatype($meta_cat, $datatype);
-        _check_picklist($data_cat)
-            if($datatype eq 'picklist');
+        if(!$datatype){
+            $data_cat->{datatype} = TBX::XCS::_get_default_datatype($meta_cat);
+        }else{
+            TBX::XCS::_check_datatype($meta_cat, $datatype);
+            _check_picklist($data_cat)
+                if($datatype eq 'picklist');
+        }
     }
-
 }
 
 sub _check_picklist {
@@ -192,7 +210,7 @@ sub _check_picklist {
         croak "$data_cat->{name} choices should be an array"
     }
     for(@$choices){
-        croak "$data_cat->{name} choices should be an array of strings"
+        croak "$data_cat->{name} choices array elements should be strings"
             if(ref $_);
     }
 }

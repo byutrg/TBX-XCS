@@ -22,13 +22,11 @@ my $json = '{
          "xref" : [
             {
                "name" : "xrefFoo",
-               "targetType" : "external",
-               "datatype" : "plainText"
+               "targetType" : "external"
             }
          ],
          "termCompList" : [
             {
-               "forTermComp" : 1,
                "datCatId" : "ISO12620A-020802",
                "name" : "termElement"
             }
@@ -54,7 +52,7 @@ my $json = '{
          ],
          "termNote" : [
             {
-               "forTermComp" : 1,
+               "forTermComp" : false,
                "datCatId" : "ISO12620A-020204",
                "name" : "animacy",
                "choices" : [
@@ -87,7 +85,7 @@ is_deeply(
 
 is_deeply(
     $xcs->get_data_cats(),
-    get_expected_data_cat(),
+    get_expected_data_cats(),
     'Data categories'
 ) or note explain $xcs->get_data_cats();
 
@@ -95,7 +93,7 @@ is($xcs->get_title, 'Example XCS file', 'Title');
 
 is($xcs->get_name, 'Small', 'Name');
 
-sub get_expected_data_cat {
+sub get_expected_data_cats {
     return
     {
       'descrip' =>
@@ -115,7 +113,6 @@ sub get_expected_data_cat {
   'termCompList' => [
     {
       'datCatId' => 'ISO12620A-020802',
-      'forTermComp' => 1,
       'name' => 'termElement'
     }
   ],
@@ -123,7 +120,7 @@ sub get_expected_data_cat {
           'choices' => ['animate', 'inanimate', 'otherAnimacy'],
           'datatype' => 'picklist',
           'datCatId' => 'ISO12620A-020204',
-          'forTermComp' => 1,
+          'forTermComp' => 0,
           'name' => 'animacy'
         }],
       'xref' => [{

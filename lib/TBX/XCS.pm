@@ -426,6 +426,11 @@ sub _check_meta_cat {
     return;
 }
 
+sub _get_default_datatype {
+    my ($meta_cat) = @_;
+    return $default_datatype{$meta_cat};
+}
+
 sub _check_datatype {
     my ($meta_cat, $datatype) = @_;
     if(! exists $allowed_datatypes->{$meta_cat}->{$datatype} ){
@@ -445,6 +450,7 @@ sub _check_levels {
         croak "Bad levels in descrip[\@name=$data->{name}]. " .
             '<levels> may only include term, termEntry, and langSet';
     }
+    return;
 }
 
 1;

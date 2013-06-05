@@ -85,4 +85,3 @@ my $actual = decode_json json_from_xcs($xcs);
 
 is_deeply($actual, $expected, 'Correct JSON structure')
   or note explain $actual;
-print json_from_xcs($xcs);

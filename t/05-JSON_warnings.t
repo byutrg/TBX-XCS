@@ -236,7 +236,7 @@ __DATA__
 }
 
 === bad data category structure
---- croak: data category 'xref' should be an array
+--- croak: meta data category 'xref' should be an array
 --- json
 {
    "constraints" : {
@@ -265,6 +265,285 @@ __DATA__
          "foo" : [
             {
 
+            }
+         ]
+      }
+   }
+}
+
+=== bad data category structure
+--- croak: data category for xref should be a hash
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "xref" : [
+            []
+         ]
+      }
+   }
+}
+
+=== missing data category name
+--- croak: missing name in data category of xref
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "xref" : [
+            {
+               "targetType" : "external",
+               "datatype" : "plainText"
+            }
+         ]
+      }
+   }
+}
+
+=== termCompList with a datatype
+--- croak: termCompList cannot contain datatype
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "termCompList" : [
+            {
+               "name" : "syllables",
+               "targetType" : "external",
+               "datatype" : "plainText"
+            }
+         ]
+      }
+   }
+}
+
+=== bad datatype
+--- croak: Can't set datatype of xref to noteText. Must be plainText or picklist.
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "xref" : [
+            {
+               "name" : "syllables",
+               "targetType" : "external",
+               "datatype" : "noteText"
+            }
+         ]
+      }
+   }
+}
+
+=== missing choices
+--- croak: need choices for picklist in foo
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "xref" : [
+            {
+               "name" : "foo",
+               "targetType" : "external",
+               "datatype" : "picklist"
+            }
+         ]
+      }
+   }
+}
+
+=== bad choices datatype
+--- croak: foo choices should be an array
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "xref" : [
+            {
+               "name" : "foo",
+               "targetType" : "external",
+               "datatype" : "picklist",
+               "choices" : {}
+            }
+         ]
+      }
+   }
+}
+
+=== choice isn't a string
+--- croak: foo choices array elements should be strings
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "xref" : [
+            {
+               "name" : "foo",
+               "targetType" : "external",
+               "datatype" : "picklist",
+               "choices" : [{}]
+            }
+         ]
+      }
+   }
+}
+
+=== missing levels
+--- croak: missing levels for foo
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "descrip" : [
+            {
+               "name" : "foo",
+               "targetType" : "external"
+            }
+         ]
+      }
+   }
+}
+
+=== bad levels
+--- croak: Bad levels.*foo.*may only include term, termEntry, and langSet
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "descrip" : [
+            {
+               "name" : "foo",
+               "targetType" : "external",
+               "levels" : ["bar"]
+            }
+         ]
+      }
+   }
+}
+
+=== bad level element structure
+--- croak: levels in foo should be single values
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "descrip" : [
+            {
+               "name" : "foo",
+               "targetType" : "external",
+               "levels" : [{}]
+            }
+         ]
+      }
+   }
+}
+
+=== bad targettype structure
+--- croak: targetType of foo should be a string
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "xref" : [
+            {
+               "name" : "foo",
+               "targetType" : {}
+            }
+         ]
+      }
+   }
+}
+
+=== disallowed forTermComp
+--- croak: only termNote data categories can have 'forTermComp'
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "xref" : [
+            {
+               "name" : "foo",
+               "forTermComp" : true
+            }
+         ]
+      }
+   }
+}
+
+=== non-boolean forTermComp
+--- croak: forTermComp should be either true or false
+--- json
+{
+   "constraints" : {
+      "languages" : {
+         "en" : "English",
+         "fr" : "French",
+         "de" : "German"
+      },
+      "datCatSet" : {
+         "termNote" : [
+            {
+               "name" : "foo",
+               "forTermComp" : "stuff"
             }
          ]
       }
