@@ -1,6 +1,8 @@
 Revision history for TBX-XCS
 
 {{$NEXT}}
+
+0.03      2013-06-05 21:42:59 America/Los_Angeles
     JSON serialization/deserialization support
     Store forTermComp value, instead of converting to boolean
     Croak with missing <contents> element
