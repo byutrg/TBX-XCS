@@ -39,7 +39,7 @@ my $expected = {
          ],
          'termCompList' => [
             {
-               'forTermComp' => 1,
+               'forTermComp' => 'yes',
                'datCatId' => 'ISO12620A-020802',
                'name' => 'termElement'
             }
@@ -65,7 +65,7 @@ my $expected = {
          ],
          'termNote' => [
             {
-               'forTermComp' => 1,
+               'forTermComp' => 'yes',
                'datCatId' => 'ISO12620A-020204',
                'name' => 'animacy',
                'choices' => [

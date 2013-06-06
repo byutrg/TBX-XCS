@@ -28,7 +28,8 @@ my $json = '{
          "termCompList" : [
             {
                "datCatId" : "ISO12620A-020802",
-               "name" : "termElement"
+               "name" : "termElement",
+               "forTermComp" : true
             }
          ],
          "descrip" : [
@@ -113,14 +114,15 @@ sub get_expected_data_cats {
   'termCompList' => [
     {
       'datCatId' => 'ISO12620A-020802',
-      'name' => 'termElement'
+      'name' => 'termElement',
+      'forTermComp' => 'yes',
     }
   ],
       'termNote' => [{
           'choices' => ['animate', 'inanimate', 'otherAnimacy'],
           'datatype' => 'picklist',
           'datCatId' => 'ISO12620A-020204',
-          'forTermComp' => 0,
+          'forTermComp' => 'no',
           'name' => 'animacy'
         }],
       'xref' => [{

@@ -173,11 +173,16 @@ sub _check_data_category {
             if(ref $data_cat->{targetType});
     }
     if(exists $data_cat->{forTermComp}){
-        if( !JSON::is_bool($data_cat->{forTermComp}) ){
-            croak "forTermComp should be either true or false"
+        if(JSON::is_bool($data_cat->{forTermComp})){
+            if($data_cat->{forTermComp}){
+                $data_cat->{forTermComp} = "yes";
+            }else{
+                $data_cat->{forTermComp} = "no";
+            }
         }
-        $data_cat->{forTermComp} =
-            ($data_cat->{forTermComp} == JSON::true) ? 1 : 0;
+        if(ref $data_cat->{forTermComp}){
+            croak "forTermComp isn't a single value in $data_cat->{name}";
+        }
     }
 }
 

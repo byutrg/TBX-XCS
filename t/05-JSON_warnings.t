@@ -508,8 +508,8 @@ __DATA__
    }
 }
 
-=== non-boolean forTermComp
---- croak: forTermComp should be either true or false
+=== non-scalar forTermComp
+--- croak: forTermComp isn't a single value in foo
 --- json
 {
    "constraints" : {
@@ -522,7 +522,7 @@ __DATA__
          "termNote" : [
             {
                "name" : "foo",
-               "forTermComp" : "stuff"
+               "forTermComp" : {}
             }
          ]
       }

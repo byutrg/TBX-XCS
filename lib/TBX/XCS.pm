@@ -174,7 +174,7 @@ would yield the data structure below:
           'choices' => ['animate', 'inanimate', 'otherAnimacy'],
           'datatype' => 'picklist',
           'datCatId' => 'ISO12620A-020204',
-          'forTermComp' => 1,
+          'forTermComp' => 'yes',
           'name' => 'animacy'
         }],
       'xref' => [{
@@ -396,7 +396,7 @@ sub _dataCat {
         }
     }
     if ($contents->att('forTermComp')){
-        $data->{forTermComp} = $contents->att('forTermComp') eq 'yes' ? 1 : 0;
+        $data->{forTermComp} = $contents->att('forTermComp');;
     }
 
     if ($contents->att('targetType')){

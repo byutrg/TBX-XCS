@@ -4,7 +4,7 @@ TBX::XCS - Extract data from an XCS file
 
 # VERSION
 
-version 0.02
+version 0.03
 
 # SYNOPSIS
 
@@ -24,7 +24,7 @@ be able to serialize the contained information into a new XCS file.
 
 ## `new`
 
-Creates a new XML::TBX::Dialect::XCS object.
+Creates a new TBX::XCS object.
 
 ## `parse`
 
@@ -102,7 +102,7 @@ would yield the data structure below:
           'choices' => ['animate', 'inanimate', 'otherAnimacy'],
           'datatype' => 'picklist',
           'datCatId' => 'ISO12620A-020204',
-          'forTermComp' => 1,
+          'forTermComp' => 'yes',
           'name' => 'animacy'
         }],
       'xref' => [{
@@ -129,7 +129,8 @@ Returns the name of the XCS file, as found in the TBXXCS element.
 
 # SEE ALSO
 
-The XCS and the TBX specification can be found on [GitHub](https://github.com/byutrg/TBX-Spec/blob/master/TBX-Default/TBX\_spec\_OSCAR.pdf).
+The XCS and the TBX specification can be found on
+[GitHub](https://github.com/byutrg/TBX-Spec/blob/master/TBX-Default/TBX\_spec\_OSCAR.pdf).
 
 # AUTHOR
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 # TODO: test this
+# PODNAME: xcs2json.pl
 # VERSION
 # ABSTRACT: Print a JSON representation of the input XCS file
 use TBX::XCS;

@@ -68,7 +68,7 @@ sub get_expected_data_cat {
   'termCompList' => [
     {
       'datCatId' => 'ISO12620A-020802',
-      'forTermComp' => 1,
+      'forTermComp' => 'yes',
       'name' => 'termElement'
     }
   ],
@@ -76,7 +76,7 @@ sub get_expected_data_cat {
           'choices' => ['animate', 'inanimate', 'otherAnimacy'],
           'datatype' => 'picklist',
           'datCatId' => 'ISO12620A-020204',
-          'forTermComp' => 1,
+          'forTermComp' => 'yes',
           'name' => 'animacy'
         }],
       'xref' => [{
