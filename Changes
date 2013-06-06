@@ -1,6 +1,8 @@
 Revision history for TBX-XCS
 
 {{$NEXT}}
+    JSON serialization/deserialization support
+    Store forTermComp value, instead of converting to boolean
     Croak with missing <contents> element
 0.02      2013-05-30 18:24:55 America/Los_Angeles
     Validate contents of <levels>

@@ -132,6 +132,7 @@ sub _check_datCatSet {
         my $data_cats = $datCatSet->{$meta_cat};
         _check_meta_cat($meta_cat, $data_cats);
     }
+    return;
 }
 
 sub _check_meta_cat {
@@ -143,6 +144,7 @@ sub _check_meta_cat {
     for my $data_cat (@$data_cats){
         _check_data_category($meta_cat, $data_cat);
     }
+    return;
 }
 
 sub _check_data_category {
@@ -184,6 +186,7 @@ sub _check_data_category {
             croak "forTermComp isn't a single value in $data_cat->{name}";
         }
     }
+    return;
 }
 
 sub _check_datatype {
@@ -201,6 +204,7 @@ sub _check_datatype {
                 if($datatype eq 'picklist');
         }
     }
+    return;
 }
 
 sub _check_picklist {
@@ -216,6 +220,7 @@ sub _check_picklist {
         croak "$data_cat->{name} choices array elements should be strings"
             if(ref $_);
     }
+    return;
 }
 
 1;

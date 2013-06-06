@@ -1,4 +1,6 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 # TODO: test this
 # PODNAME: xcs2json.pl
 # VERSION
