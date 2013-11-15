@@ -31,7 +31,7 @@ warning_is {$xcs->parse(file => $termCompList_xcs_file)}
   'Warning about ignoring termCompList datatype';
 
 throws_ok {$xcs->parse(file => $datatype_xcs_file)}
-  qr/Can't set datatype of hi to noteText. Must be plainText or picklist/,
+  qr/Can't set datatype of hi to noteText. Must be picklist or plainText/,
   'Exception thrown with illegal datatype';
 
 throws_ok {$xcs->parse(file => $levels_xcs_file)}

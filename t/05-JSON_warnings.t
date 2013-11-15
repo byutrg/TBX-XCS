@@ -333,7 +333,7 @@ __DATA__
 }
 
 === bad datatype
---- croak: Can't set datatype of xref to noteText. Must be plainText or picklist.
+--- croak: Can't set datatype of xref to noteText. Must be picklist or plainText.
 --- json
 {
    "constraints" : {

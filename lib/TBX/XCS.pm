@@ -436,7 +436,7 @@ sub _check_datatype {
     if(! exists $allowed_datatypes->{$meta_cat}->{$datatype} ){
         croak "Can't set datatype of $meta_cat to $datatype. Must be " .
             join (' or ',
-                keys %{ $allowed_datatypes->{$meta_cat} } ) . '.';
+                sort keys %{ $allowed_datatypes->{$meta_cat} } ) . '.';
     }
     return;
 }

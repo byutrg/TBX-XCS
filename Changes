@@ -1,7 +1,7 @@
 Revision history for TBX-XCS
 
 {{$NEXT}}
-
+    Fixed test dependence on hash key ordering
 0.04      2013-10-28 17:40:28 America/Los_Angeles
     Updated repository location
 0.03      2013-06-05 21:42:59 America/Los_Angeles
